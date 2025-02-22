@@ -28,6 +28,7 @@
 - `intelmq.bots.collectors.mail.collector_mail_url`:
   - Log the downloaded size in bytes to ease troubleshooting (PR#2554 by Sebastian Wagner).
   - Fix import for Timeout exception preventing another exception (fixes #2555, PR#2556 by Sebastian Wagner).
+- Remove `intelmq.bots.collectors.twitter` as it uses an unmaintained library and does not work any more (fixes #2346, #2441, PR#2568 by Sebastian Wagner).
 
 #### Parsers
 - `intelmq.bots.parsers.shadowserver._config`:
