@@ -2268,11 +2268,12 @@ No additional parameters.
 
 ---
 
-### Twitter <div id="intelmq.bots.parsers.twitter.parser" />
+### IoC Extractor (ex: Twitter) <div id="intelmq.bots.parsers.twitter.parser" /><div id="intelmq.bots.parsers.ioc_extractor.parser" />
 
 Extracts URLs from text, fuzzy, aimed at parsing tweets.
 
-**Module:** `intelmq.bots.parsers.twitter.parser`
+**Module:** `intelmq.bots.parsers.ioc_extractor.parser`<br>
+previously: `intelmq.bots.parsers.twitter.parser`
 
 **Parameters:**
 

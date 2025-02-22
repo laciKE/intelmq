@@ -29,6 +29,8 @@
   - Log the downloaded size in bytes to ease troubleshooting (PR#2554 by Sebastian Wagner).
   - Fix import for Timeout exception preventing another exception (fixes #2555, PR#2556 by Sebastian Wagner).
 - Remove `intelmq.bots.collectors.twitter` as it uses an unmaintained library and does not work any more (fixes #2346, #2441, PR#2568 by Sebastian Wagner).
+- Renamed `intelmq.bots.parser.twitter` to `intelmq.bots.parser.ioc_extractor` (PR#2568 by Sebastian Wagner).
+  - Added `intelmq.bots.parser.twitter` as a stub to load the IoC Extractor parser.
 
 #### Parsers
 - `intelmq.bots.parsers.shadowserver._config`:
