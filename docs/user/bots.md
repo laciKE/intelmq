@@ -960,7 +960,7 @@ The resulting reports contain the following special field:
 
 **`reports`**
 
-(required, string/array of strings) An array of strings (or a list of comma-separated values) of the mailing lists you want to process.
+(optional, string/array of strings) An array of strings (or a list of comma-separated values) of the mailing lists you want to process.
 
 **`types`**
 
