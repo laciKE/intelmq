@@ -12,6 +12,7 @@
 ### Configuration
 
 ### Core
+- AMQP: Fix maintaining pipeline connection when during interrupted connections (PR#2533 by Kamil Mankowski).
 - Python 3.8 or newer is required (PR#2541 by Sebastian Wagner).
 - `intelmq.lib.utils.list_all_bots`/`intelmqctl check`: Fix check for bot executable in $PATH by using the bot name instead of the import path (fixes #2559, PR#2564 by Sebastian Wagner).
 
