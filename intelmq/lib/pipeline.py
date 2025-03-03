@@ -646,6 +646,9 @@ class Amqp(Pipeline):
         if self.source_queue is None:
             raise exceptions.ConfigurationError('pipeline', 'No source queue given.')
         try:
+            # self.channel.consume is blocking and with no incoming messages
+            # can prevent heartbeat maintenance. This loop let the pika maintain
+            # the channel at least once between expected heartbeats.
             method, body = None, None
             while not (method or body):
                 method, _, body = next(
