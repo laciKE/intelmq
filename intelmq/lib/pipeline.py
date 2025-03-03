@@ -608,10 +608,7 @@ class Amqp(Pipeline):
                                                 mandatory=True,
                                                 )
         except Exception as exc:  # UnroutableError, NackError in 1.0.0
-            if reconnect and (
-                isinstance(exc, pika.exceptions.ConnectionClosed) or
-                isinstance(exc, pika.exceptions.StreamLostError)
-            ):
+            if reconnect and isinstance(exc, (pika.exceptions.ConnectionClosed, pika.exceptions.StreamLostError)):
                 self.logger.debug('Error sending the message. '
                                   'Will re-connect and re-send.',
                                   exc_info=True)

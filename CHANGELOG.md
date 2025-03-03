@@ -12,7 +12,7 @@
 ### Configuration
 
 ### Core
-- Fix maintaining pipeline connection when using AMQP (PR# by Kamil Mankowski).
+- AMQP: Fix maintaining pipeline connection when during interrupted connections (PR#2533 by Kamil Mankowski).
 
 ### Development
 
