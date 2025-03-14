@@ -497,7 +497,7 @@ class Message(dict):
         """
         dict_eq = super().__eq__(other)
         if dict_eq and issubclass(type(other), Message):
-            type_eq = type(self) == type(other)
+            type_eq = type(self) is type(other)
             harm_eq = self.harmonization_config == other.harmonization_config if hasattr(other, 'harmonization_config') else False
             if type_eq and harm_eq:
                 return True

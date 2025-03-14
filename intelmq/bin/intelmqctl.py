@@ -701,7 +701,7 @@ Get some debugging output on the settings and the environment (to be extended):
         pipeline = PipelineFactory.create(logger=self._logger, pipeline_args=self._parameters.__dict__)
         pipeline.set_queues(None, "source")
         pipeline.connect()
-        source_queues, destination_queues, internal_queues,\
+        source_queues, destination_queues, internal_queues, \
             all_queues = self.get_queues(with_internal_queues=pipeline.has_internal_queues)
 
         counters = pipeline.count_queued_messages(*all_queues)
