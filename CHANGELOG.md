@@ -10,7 +10,7 @@ This file lists all changes between IntelMQ releases.
 Please refer to the [NEWS](NEWS.md) for a list of changes which have an affect on the administration of IntelMQ and contains steps that you need to be aware off for the upgrade.
 
 
-3.4.0 Feature release (2025-03-08)
+3.4.0 Feature release (2025-03-14)
 ----------------------------------
 
 ### Configuration
