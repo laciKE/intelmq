@@ -2108,7 +2108,7 @@ No additional parameters.
 The Shadowserver parser operates on CSV formatted data.
 
 
-**How this bot works?**
+**How does this bot work?**
 
 There are two possibilities for the bot to determine which report type the data belongs to in order to determine the
 correct mapping of the columns:
