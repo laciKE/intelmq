@@ -133,7 +133,8 @@ class ASNLookupExpertBot(ExpertBot):
                 pattern = re.compile(r"href=\"(rib\.\d{8}\.\d{4}\.bz2)\"")
                 days = pattern.findall(response.text)
                 days.sort(reverse=True)
-                print(url)
+                if verbose:
+                    print(url)
                 if days:
                     break
 

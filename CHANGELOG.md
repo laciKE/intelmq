@@ -27,6 +27,7 @@ Please refer to the [NEWS](NEWS.md) for a list of changes which have an affect o
 #### Parsers
 
 #### Experts
+- `intelmq.bots.experts.asn_lookup.expert`: Print URLs to stdout only in verbose mode (PR#2591 by Sebastian Wagner).
 
 #### Outputs
 
