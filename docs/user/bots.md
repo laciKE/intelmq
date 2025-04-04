@@ -2143,7 +2143,7 @@ correct mapping of the columns:
 
 (optional, string) Name of the Shadowserver report. The value for each report type can be found in the schema `feed_name` field.
 
-For example using `curl -s https://interchange.shadowserver.org/intelmq/v1/schema | jq . | grep feed_name | awk '// { print $2; }' | sed  -E 's/[",]//g'`.
+For example using `curl -s https://interchange.shadowserver.org/intelmq/v1/schema | jq .[].feed_name`.
 
 **`overwrite`**
 
