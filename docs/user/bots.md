@@ -2686,11 +2686,12 @@ is `$portal_url + '/api/1.0/ripe/contact?cidr=%s'`.
 
 ### Fake <div id="intelmq.bots.experts.fake.expert" />
 
-Adds fake data to events. Currently supports setting the IP address and network.
+Adds fake data to events. It currently supports two operation methods:
 
-For each incoming event, the bots chooses one random IP network range from the configured data file.
-It set's the first IP address of the range as `source.ip` and the network itself as `source.network`.
-To adapt the `source.asn` field accordingly, use the [ASN Lookup Expert](#asn-lookup).
+* Setting the IP address and network
+* For any Event field, set the value to a random item of a user-defined list (mode `random_single_value`)
+
+For a detailed description of the modes, see below.
 
 **Module:** `intelmq.bots.experts.fake.expert`
 
@@ -2698,13 +2699,21 @@ To adapt the `source.asn` field accordingly, use the [ASN Lookup Expert](#asn-lo
 
 **`database`**
 
-(required, string) Path to a JSON file in the following format:
+(required, string) Path to a JSON file in the following format (example):
 ```
 {
     "ip_network": [
         "10.0.0.0/8",
+        "192.168.0.0/16",
         ...
-    ]
+    ],
+    "event_fields": {
+      "extra.severity": {
+        "mode": "random_single_value",
+        "values": ["critical", "high", "medium", "low", "info", "undefined"]
+      },
+      ...
+    }
 }
 ```
 
@@ -2712,8 +2721,19 @@ To adapt the `source.asn` field accordingly, use the [ASN Lookup Expert](#asn-lo
 
 (optional, boolean) Whether to overwrite existing fields. Defaults to false.
 
+### Modes
+
+#### IP Network
+For each incoming event, the bots chooses one random IP network range (IPv4 or IPv6) from the configured data file.
+It set's the first IP address of the range as `source.ip` and the network itself as `source.network`.
+To adapt the `source.asn` field accordingly, use the [ASN Lookup Expert](#asn-lookup).
+
 For data consistency `source.network` will only be set if `source.ip` was set or overridden.
 If overwrite is false, `source.ip` was did not exist before but `source.network` existed before, `source.network` will still be overridden.
+
+#### Event fields
+##### Mode `random_single_value`
+For any possible event field, the bot chooses a random value of the values in the `values` property.
 
 ---
 
