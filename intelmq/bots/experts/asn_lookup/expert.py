@@ -11,6 +11,7 @@ import bz2
 import pathlib
 import requests
 
+from intelmq import VAR_STATE_PATH
 from intelmq.lib.bot import ExpertBot
 from intelmq.lib.exceptions import MissingDependencyError
 from intelmq.lib.utils import get_bots_settings, create_request_session
@@ -25,7 +26,7 @@ except ImportError:
 
 class ASNLookupExpertBot(ExpertBot):
     """Add ASN and netmask information from a local BGP dump"""
-    database = None  # TODO: should be pathlib.Path
+    database: str = f'{VAR_STATE_PATH}asn_lookup/ipasn.dat'  # TODO: should be pathlib.Path
     autoupdate_cached_database: bool = True  # Activate/deactivate update-database functionality
 
     def init(self):
