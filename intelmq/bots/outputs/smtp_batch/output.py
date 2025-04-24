@@ -167,8 +167,12 @@ class SMTPBatchOutputBot(Bot):
                 sys.exit(0)
             elif i == "all":
                 count = 0
+                exit_code = 0
                 for mail in mails:
-                    if self.build_mail(mail, send=True):
+                    succ = self.build_mail(mail, send=True)
+                    if not succ:
+                        exit_code = 1
+                    else:
                         count += 1
                         print(f"{mail.to} ", end="", flush=True)
                         try:
@@ -183,7 +187,7 @@ class SMTPBatchOutputBot(Bot):
                         if mail.path:
                             os.unlink(mail.path)
                 print(f"\n{count}× mail sent.\n")
-                sys.exit(0)
+                sys.exit(exit_code)
             elif i == "clear":
                 for mail in mails:
                     self.cache.redis.delete(mail.key)
