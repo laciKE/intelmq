@@ -5119,6 +5119,13 @@ original2@email.com,person1@email.com;person2@email.com
 original3@email.com, Mary <person1@example.com>; John <person2@example.com>
 ```
 
+**`additional_grouping_keys`**
+
+(optional, list) By-default events are grouped by the E-Mail-Address into buckets. For each bucket one E-Mail is sent. You may add more fields to group-by here to make potentially more buckets.
+Side-effect: Every field that is included in the group-by is ensured to be uniqe for all events in the bucket and may thus be used for templating.
+Note: The keys listed here refer to the keys in the events (in contrast to the CSV column names).
+Default: `[]`
+
 **`attachment_name`**
 
 (optional, string)  Attachment file name for the outgoing messages. May contain date formatting like this `%Y-%m-%d`. Example: "events_%Y-%m-%d" will appear as "events_2022-12-01.zip". Defaults to "intelmq_%Y-%m-%d".
