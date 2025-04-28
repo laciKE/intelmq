@@ -5126,6 +5126,12 @@ Side-effect: Every field that is included in the group-by is ensured to be uniqe
 Note: The keys listed here refer to the keys in the events (in contrast to the CSV column names).
 Default: `[]`
 
+**`templating`**
+
+(optional, dict) Defines which strings should be processed by jinja2 templating. For templating only keys which are unique for the complete bucket are available. This always includes the destination address (`source.abuse_contact`) and all keys of `additional_grouping_keys` which are present in the bucket. There is one additional key `current_time` available which holds a `datetime.datetime` object of the current (local) time.
+Note: The keys available for templating refer to the keys defined for the events (in contrast to the CSV column names). Still the keys get transformed: each `'.'` gets replaced to `_` in order to make referencing the key in jinja2 easier.
+Default: `{subject: False, body: False, attachment: False}`
+
 **`allowed_fieldnames`**
 
 (optional, list) Lists the fields which are included in the csv file. Every element should be also included in `fieldnames_translation` to avoid crashes.
