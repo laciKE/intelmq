@@ -5126,6 +5126,15 @@ Side-effect: Every field that is included in the group-by is ensured to be uniqe
 Note: The keys listed here refer to the keys in the events (in contrast to the CSV column names).
 Default: `[]`
 
+**`allowed_fieldnames`**
+
+(optional, list) Lists the fields which are included in the csv file. Every element should be also included in `fieldnames_translation` to avoid crashes.
+
+**`fieldnames_translation`**
+
+(optional, dict) Maps each the name of each field listed in `allowed_fieldnames` to a different name to be used in the csv header.
+**Warning:** The Bot will crash on sending in case a fieldname is present in an event and in `allowed_fieldnames` but not in `fieldnames_translation`.
+
 **`attachment_name`**
 
 (optional, string)  Attachment file name for the outgoing messages. May contain date formatting like this `%Y-%m-%d`. Example: "events_%Y-%m-%d" will appear as "events_2022-12-01.zip". Defaults to "intelmq_%Y-%m-%d".
