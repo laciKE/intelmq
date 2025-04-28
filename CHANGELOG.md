@@ -41,6 +41,7 @@ Please refer to the [NEWS](NEWS.md) for a list of changes which have an affect o
 - `.github/workflows/codespell.yml`, `debian-package.yml`, `regexploit.yml`: Upgrade to `ubuntu-latest` runners (PR#2602 by Sebastian Wagner).
 
 ### Tools
+- `intelmq.bin.intelmq_psql_initdb`: Use `JSONB` type by default, Postgres supports it since version 9 (PR#2597 by Sebastian Wagner).
 
 ### Contrib
 
