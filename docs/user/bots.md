@@ -2611,7 +2611,7 @@ When using a whitelist field pattern and a small number of fields (keys), it bec
 exist in the events themselves. If a field does not exist, but is part of the hashing/deduplication, this field will be
 ignored. If such events should not get deduplicated, you need to filter them out before the deduplication process, e.g.
 using a sieve expert. See
-also [this discussion thread](https://lists.cert.at/pipermail/intelmq-users/2021-July/000370.html) on the mailing-list.
+also [this discussion thread](https://lists.cert.at/mailman3/hyperkitty/list/intelmq-users@lists.cert.at/thread/V6YTF4XGALC37C666LPWQ6KK6CLAR6T2/) on the mailing-list.
 
 **Configuration Example**
 
