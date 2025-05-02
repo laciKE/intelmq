@@ -35,11 +35,20 @@ class StixParserBot(ParserBot):
                 indicator = self.parse_stix_pattern(pattern)
                 if indicator:
                     event.add(indicator[0], indicator[1])
+                    self.parse_vendor_specific(event, line, report)
                     yield event
             else:
                 self.logger.warning('Unexpected type of pattern expression: %r, pattern: %r', pattern_type, pattern)
         else:
             self.logger.warning('Unexpected type of STIX object: %r', object_type)
+
+    def parse_vendor_specific(self, event, line, report):
+        """
+        Parse vendor specific details from the STIX 2.1 Indicator object.
+        This method by default does nothing and it is called just before IntelMQ event is yielded.
+        If we need vendor-specific STIX parser, we can inherit from this class and override this one method.
+        """
+        return
 
     @staticmethod
     def parse_stix_pattern(pattern):

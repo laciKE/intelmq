@@ -27,17 +27,17 @@ EXAMPLE_REPORT = {'__type': 'Report',
                   }
 
 EXAMPLE_EVENT = {'__type': 'Event',
-                  'feed.name': 'Taxii Feed',
-                  'feed.code': 'feed stix2.1',
-                  'feed.provider': 'Taxii Provider',
-                  'feed.documentation': 'Taxii Documentation',
-                  'feed.accuracy': 100.0,
-                  'feed.url': 'http://localhost/feed',
-                  'source.url': 'http://example.org',
-                  'time.source': '1970-01-01T00:00:00+00:00',
-                  'classification.type': 'undetermined',
-                  'raw': 'eyJpZCI6ICJpbmRpY2F0b3ItLTAiLCAidHlwZSI6ICJpbmRpY2F0b3IiLCAic3BlY192ZXJzaW9uIjogIjIuMSIsICJjcmVhdGVkIjogIjE5NzAtMDEtMDFUMDA6MDA6MDAuMDAwWiIsICJtb2RpZmllZCI6ICIxOTcwLTAxLTAxVDAwOjAwOjAwLjAwMFoiLCAicGF0dGVybiI6ICJbdXJsOnZhbHVlID0gJ2h0dHA6Ly9leGFtcGxlLm9yZyddIiwgInBhdHRlcm5fdHlwZSI6ICJzdGl4IiwgInZhbGlkX2Zyb20iOiAiMTk3MC0wMS0wMVQwMDowMDowMFoifQ=='
-                  }
+                 'feed.name': 'Taxii Feed',
+                 'feed.code': 'feed stix2.1',
+                 'feed.provider': 'Taxii Provider',
+                 'feed.documentation': 'Taxii Documentation',
+                 'feed.accuracy': 100.0,
+                 'feed.url': 'http://localhost/feed',
+                 'source.url': 'http://example.org',
+                 'time.source': '1970-01-01T00:00:00+00:00',
+                 'classification.type': 'undetermined',
+                 'raw': 'eyJpZCI6ICJpbmRpY2F0b3ItLTAiLCAidHlwZSI6ICJpbmRpY2F0b3IiLCAic3BlY192ZXJzaW9uIjogIjIuMSIsICJjcmVhdGVkIjogIjE5NzAtMDEtMDFUMDA6MDA6MDAuMDAwWiIsICJtb2RpZmllZCI6ICIxOTcwLTAxLTAxVDAwOjAwOjAwLjAwMFoiLCAicGF0dGVybiI6ICJbdXJsOnZhbHVlID0gJ2h0dHA6Ly9leGFtcGxlLm9yZyddIiwgInBhdHRlcm5fdHlwZSI6ICJzdGl4IiwgInZhbGlkX2Zyb20iOiAiMTk3MC0wMS0wMVQwMDowMDowMFoifQ=='
+                 }
 
 
 class TestStixParserBot(test.BotTestCase, unittest.TestCase):
@@ -55,7 +55,6 @@ class TestStixParserBot(test.BotTestCase, unittest.TestCase):
         self.input_message = EXAMPLE_REPORT
         self.run_bot()
         self.assertMessageEqual(0, EXAMPLE_EVENT)
-
 
     def test_pattern_url(self):
         """ Test if url pattern is parsed. """
