@@ -2357,6 +2357,8 @@ No additional parameters.
 
 Aggregates events based upon given fields & timespan.
 
+![Aggregate illustration](../static/images/bots/aggregate.svg)
+
 Define specific fields to filter incoming events and aggregate them. Also set the timespan you want the events to get
 aggregated.
 
