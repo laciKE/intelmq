@@ -43,6 +43,7 @@ def hash_arbitrary(value: Any) -> bytes:
         value_bytes = json.dumps(value, sort_keys=True).encode("utf-8")
     return sha256(value_bytes).digest()
 
+
 @dataclass
 class Mail:
     key: str
@@ -96,7 +97,7 @@ class SMTPBatchOutputBot(Bot):
             field = message["source.abuse_contact"]
             for mail in (field if isinstance(field, list) else [field]):
                 # - Each event goes into one bucket (equivalent to group-by)
-                # - The id of each bucket is calcuated by hashing all the keys that should be grouped for
+                # - The id of each bucket is calculated by hashing all the keys that should be grouped for
                 # - Hashing ensures the redis-key does not grow indefinitely.
                 # - In order to avoid collisions, each value is hashed before
                 #   appending to the input for the redis-key-hash
