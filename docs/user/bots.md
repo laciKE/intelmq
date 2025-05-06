@@ -5122,7 +5122,7 @@ original3@email.com, Mary <person1@example.com>; John <person2@example.com>
 **`additional_grouping_keys`**
 
 (optional, list) By-default events are grouped by the E-Mail-Address into buckets. For each bucket one E-Mail is sent. You may add more fields to group-by here to make potentially more buckets.
-Side-effect: Every field that is included in the group-by is ensured to be uniqe for all events in the bucket and may thus be used for templating.
+Side-effect: Every field that is included in the group-by is ensured to be unique for all events in the bucket and may thus be used for templating.
 Note: The keys listed here refer to the keys in the events (in contrast to the CSV column names).
 Default: `[]`
 
