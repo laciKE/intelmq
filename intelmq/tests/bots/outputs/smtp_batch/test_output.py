@@ -11,19 +11,21 @@ except ImportError:
 
 import intelmq.lib.test as test
 from intelmq.bots.outputs.smtp_batch.output import SMTPBatchOutputBot
-from intelmq.lib.cache import Cache
 from intelmq.lib.exceptions import MissingDependencyError
+from hashlib import sha256
 
 BOT_ID = "test-bot"
 IDENTITY1 = 'one@example.com'
-KEY1 = f"{BOT_ID}:{IDENTITY1}".encode()
+IDENTITY1_HASH = sha256(sha256(IDENTITY1.encode()).digest()).hexdigest()
+KEY1 = f"{BOT_ID}:{IDENTITY1_HASH}".encode()
 EVENT1 = {'__type': 'Event',
           'source.ip': '127.0.0.1',
           'source.url': 'http://example.com/',
           'source.abuse_contact': IDENTITY1
           }
 IDENTITY2 = 'one@example2.com'
-KEY2 = f"{BOT_ID}:{IDENTITY2}".encode()
+IDENTITY2_HASH = sha256(sha256(IDENTITY2.encode()).digest()).hexdigest()
+KEY2 = f"{BOT_ID}:{IDENTITY2_HASH}".encode()
 EVENT2 = {'__type': 'Event',
           'source.ip': '127.0.0.2',
           'source.url': 'http://example2.com/',
@@ -67,6 +69,7 @@ class TestSMTPBatchOutputBot(test.BotTestCase, unittest.TestCase):
         self.assertEqual(message, envelope.message())
         self.assertEqual(from_, envelope.from_())
         self.assertEqual(to, envelope.to())
+        # TODO template_data
 
     def send_message(self):
         def _(envelope):
