@@ -37,6 +37,7 @@ Please refer to the [NEWS](NEWS.md) for a list of changes which have an affect o
 
 ### Packaging
 - Replace `/opt/intelmq` example paths in bots with variable `VAR_STATE_PATH` for correct paths in LSB-path setups like with packages (PR#2587 by Sebastian Wagner).
+- New deb-package `intelmq-contrib` with all `contrib/` scripts and documentation (PR#2614 by Sebastian Wagner).
 
 ### Tests
 - `intelmq.tests.lib.test_pipeline.TestAmqp.test_acknowledge`: Skip on all Python versions when running on CI (PR#2602 by Sebastian Wagner).
