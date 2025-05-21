@@ -33,7 +33,6 @@ override_dh_auto_build:
 	# $(MAKE) docs
 
 override_dh_auto_install: $(BOTDOCS)
-	rm intelmq/bin/rewrite_config_files.py
 	sed -i -e '/#!\/usr\/bin\//d' intelmq/bin/*.py
 	sed -i -f debian/sedfile intelmq/etc/* setup.py contrib/logrotate/intelmq contrib/logcheck/logcheck.logfiles
 	dh_auto_install
