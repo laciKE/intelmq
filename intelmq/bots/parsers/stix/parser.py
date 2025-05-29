@@ -9,6 +9,7 @@ import json
 
 
 from intelmq.lib.bot import ParserBot
+from intelmq.lib.exceptions import MissingDependencyError
 
 try:
     import stix2patterns.v21.pattern as stix2_pattern

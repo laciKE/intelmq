@@ -42,7 +42,7 @@ EXAMPLE_EVENT = {'__type': 'Event',
                  'raw': 'eyJpZCI6ICJpbmRpY2F0b3ItLTAiLCAidHlwZSI6ICJpbmRpY2F0b3IiLCAic3BlY192ZXJzaW9uIjogIjIuMSIsICJjcmVhdGVkIjogIjE5NzAtMDEtMDFUMDA6MDA6MDAuMDAwWiIsICJtb2RpZmllZCI6ICIxOTcwLTAxLTAxVDAwOjAwOjAwLjAwMFoiLCAicGF0dGVybiI6ICJbdXJsOnZhbHVlID0gJ2h0dHA6Ly9leGFtcGxlLm9yZyddIiwgInBhdHRlcm5fdHlwZSI6ICJzdGl4IiwgInZhbGlkX2Zyb20iOiAiMTk3MC0wMS0wMVQwMDowMDowMFoiLCAiZGVzY3JpcHRpb24iOiAiQyZDIGluZGljYXRlcyB0aGF0IGEgYm90bmV0IFdpbjMyL1NweS5MdW1tYVN0ZWFsZXIuQiB0cm9qYW4gaXMgcHJlc2VudC4iLCAibGFiZWxzIjogWyJtYWxpY2lvdXMtYWN0aXZpdHkiXX0='
                  }
 
-
+@test.skip_exotic()
 class TestESETStixParserBot(test.BotTestCase, unittest.TestCase):
     """
     A TestCase for an ESETStixParserBot.
