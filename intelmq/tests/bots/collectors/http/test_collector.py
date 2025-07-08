@@ -107,6 +107,7 @@ class TestHTTPCollectorBot(test.BotTestCase, unittest.TestCase):
         output['feed.url'] = 'http://localhost/foobar.gz'
         del output['extra.file_name']
         self.assertMessageEqual(0, output)
+        self.assertLogMatches(r'Report downloaded \(29B\).', 'INFO')
 
     def test_zip_auto(self, mocker):
         """
@@ -140,6 +141,25 @@ class TestHTTPCollectorBot(test.BotTestCase, unittest.TestCase):
         output0['feed.url'] = 'http://localhost/two_files.zip'
         output1 = OUTPUT[1].copy()
         output1['feed.url'] = 'http://localhost/two_files.zip'
+        self.assertMessageEqual(0, output0)
+        self.assertMessageEqual(1, output1)
+
+    def test_zip_subdirs(self, mocker):
+        """
+        Test unzipping when the zip has subdirectories
+        """
+        prepare_mocker(mocker)
+        self.run_bot(parameters={'http_url': 'http://localhost/subdir.zip',
+                                 'name': 'Example feed',
+                                 },
+                     iterations=1)
+
+        output0 = OUTPUT[0].copy()
+        output0['feed.url'] = 'http://localhost/subdir.zip'
+        output0['extra.file_name'] = 'subdir/bar'
+        output1 = OUTPUT[1].copy()
+        output1['feed.url'] = 'http://localhost/subdir.zip'
+        output1['extra.file_name'] = 'subdir/foo'
         self.assertMessageEqual(0, output0)
         self.assertMessageEqual(1, output1)
 

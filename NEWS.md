@@ -1,5 +1,5 @@
 <!-- comment
-   SPDX-FileCopyrightText: 2015-2023 Sebastian Wagner
+   SPDX-FileCopyrightText: 2015-2025 Sebastian Wagner
    SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
@@ -10,10 +10,11 @@ This file lists all changes which have an affect on the administration of IntelM
 Please refer to the change log for a full list of changes.
 
 
-3.3.0 Bugfix release (unreleased)
----------------------------------
+3.4.1 Patch release (unreleased)
+--------------------------------
 
 ### Requirements
+Python `>=3.9` is now required, which is available on all platforms supported by IntelMQ.
 
 ### Tools
 
@@ -24,13 +25,52 @@ Please refer to the change log for a full list of changes.
 ### Libraries
 
 ### Postgres databases
+To switch to the more efficient data type `jsonb` instead of `json`, use the following SQL statement. Data is preserved. JSONB also has more query and data manipulation features than plain JSON.
+```sql
+ALTER TABLE events
+   ALTER COLUMN "extra" SET DATA TYPE jsonb;
+```
+
+
+3.4.0 Feature release (2025-03-14)
+----------------------------------
+
+### Requirements
+Python 3.8 or newer is required.
+
+## Bots
+#### CIF 3 API Output deprecation
+The CIF 3 API Output bot is not compatible with Python version greater or equal to 3.12 and will be removed in the future due to lack of maintenance.
+See https://lists.cert.at/pipermail/intelmq-users/2024-December/000474.html for more information.
+
+#### Twitter Collector removal
+As the bot does not work anymore and uses an unmaintained library, it is removed from IntelMQ.
+Please remove if from your setup.
+
+`intelmqctl check` and `intelmqctl upgrade-config` command warns if you have the bot in use.
+
+#### Twitter Parser renaming
+The Twitter parser is renamed to *IoC Extractor Parser* (`intelmq.bots.parsers.ioc_extractor`).
+`intelmqctl upgrade-config` will automatically adapt the configuration.
+
+The previous module name is left as a stub to load the IoC Extractor parser for backwards-compatibility.
+
+### Packaging
+Packages are now also available  for Ubuntu 24.04.
+To upgrade an Ubuntu 22.04 installation to 24.04 please refer to the Ubuntu documentation: https://documentation.ubuntu.com/server/how-to/software/upgrade-your-release/index.html
+
+
+3.3.1 Bugfix release (2024-09-03)
+---------------------------------
+
+No changes are required by administrators.
 
 
 3.3.0 Feature release (2024-03-01)
 ----------------------------------
 
 ### Documentation
-The documentation is now available at [docs.intelmq.org](https://docs.intelmq.org/). Documentation has been updated and restructured into User, Administrator and Developer Guide. It provides modern look with various quality of life improvements. Big thanks to to @gethvi. 
+The documentation is now available at [docs.intelmq.org](https://docs.intelmq.org/). Documentation has been updated and restructured into User, Administrator and Developer Guide. It provides modern look with various quality of life improvements. Big thanks to to @gethvi.
 We now have a slick, modern mkdocs based documentation. Please do check it out!
 
 
@@ -49,7 +89,7 @@ Shadowserver adds new scans on a nearly weekly basis. IntelMQ's release cycle an
 We therefore (thanks to @eslif2) move the shadowserver reports collector and parser to a new, dynamic system. It can:
 
  - fetch the shadowserver schema from shadowserver (https://interchange.shadowserver.org/intelmq/v1/schema)
- - dynamically collect new reports (see also https://docs.intelmq.org/latest/user/bots/?h=shadow#shadowserver-reports-api) 
+ - dynamically collect new reports (see also https://docs.intelmq.org/latest/user/bots/?h=shadow#shadowserver-reports-api)
  - parse the new reports
 
 **Note well**: if your IntelMQ system runs in an airgapped environment or if it may only reach out to specific IPs/sites, you should read the notes here:
@@ -80,7 +120,7 @@ Quite a few changes (thanks to Kamil, @gethvi) on AMQP
 ### General changes and bug fixes
 
 Digital Trust Center fixed a bug where the config was loaded twice in intelmqctl which created quite some speedups. Thanks!
-This speeds up IntelMQ API calls. 
+This speeds up IntelMQ API calls.
 
 ### Data Format
 

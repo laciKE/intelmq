@@ -960,7 +960,7 @@ The resulting reports contain the following special field:
 
 **`reports`**
 
-(required, string/array of strings) An array of strings (or a list of comma-separated values) of the mailing lists you want to process.
+(optional, string/array of strings) An array of strings (or a list of comma-separated values) of the mailing lists you want to process.
 
 **`types`**
 
@@ -1276,60 +1276,18 @@ Also, you will need to know an appropriate STOMP *destination* (aka
 
 (optional, string) Password to use.
 
----
-
-### Twitter (REMOVE?) <div id="intelmq.bots.collectors.twitter.collector_twitter" />
-
-Collects tweets.
-
-Collects tweets from target_timelines. Up to tweet_count tweets from each user and up to timelimit back in time. The
-tweet text is sent separately and if allowed, links to pastebin are followed and the text sent in a separate report
-
-**Module:** `intelmq.bots.collectors.twitter.collector_twitter`
-
-**Parameters (also expects [feed parameters](#feed-parameters)):**
-
-**`target_timelines`**
-
-() screen_names of twitter accounts to be followed
-
-**`tweet_count`**
-
-() number of tweets to be taken from each account
-
-**`timelimit`**
-
-() maximum age of the tweets collected in seconds
-
-**`follow_urls`**
-
-() list of screen_names for which URLs will be followed
-
-**`exclude_replies`**
-
-() exclude replies of the followed screen_names
-
-**`include_rts`**
-
-() whether to include retweets by given screen_name
-
-**`consumer_key`**
-
-() Twitter API login data
-
-**`consumer_secret`**
-
-() Twitter API login data
-
-**`access_token_key`**
-
-() Twitter API login data
-
-**`access_token_secret`**
-
-() Twitter API login data
-
 ## Parser Bots
+
+If not set differently during parsing, all parser bots copy the following fields from the report to an event:
+
+  - `feed.accuracy`
+  - `feed.code`
+  - `feed.documentation`
+  - `feed.name`
+  - `feed.provider`
+  - `feed.url`
+  - `rtir_id`
+  - `time.observation`
 
 ### Common parameters
 
@@ -1344,6 +1302,18 @@ example usage:
 defaults_fields:
   classification.type: c2-server
   protocol.transport: tcp
+```
+
+#### `copy_collector_provided_fields`
+
+(optional, list) List of additional fields to be copy from the report (only applied if parsing the
+event doesn't set the value).
+
+Example usage:
+
+```yaml
+copy_collector_provided_fields:
+  - extra.file_name
 ```
 
 ---
@@ -2138,7 +2108,7 @@ No additional parameters.
 The Shadowserver parser operates on CSV formatted data.
 
 
-**How this bot works?**
+**How does this bot work?**
 
 There are two possibilities for the bot to determine which report type the data belongs to in order to determine the
 correct mapping of the columns:
@@ -2179,7 +2149,7 @@ For example using `curl -s https://interchange.shadowserver.org/intelmq/v1/schem
 
 (optional, boolean) If an existing `feed.name` should be overwritten.
 
-** `auto_update`**
+**`auto_update`**
 
 (optional, boolean) Enable automatic schema download.
 
@@ -2298,11 +2268,12 @@ No additional parameters.
 
 ---
 
-### Twitter <div id="intelmq.bots.parsers.twitter.parser" />
+### IoC Extractor (ex: Twitter) <div id="intelmq.bots.parsers.twitter.parser" /><div id="intelmq.bots.parsers.ioc_extractor.parser" />
 
 Extracts URLs from text, fuzzy, aimed at parsing tweets.
 
-**Module:** `intelmq.bots.parsers.twitter.parser`
+**Module:** `intelmq.bots.parsers.ioc_extractor.parser`<br>
+previously: `intelmq.bots.parsers.twitter.parser`
 
 **Parameters:**
 
@@ -2385,6 +2356,8 @@ No additional parameters.
 ### Aggregate <div id="intelmq.bots.experts.aggregate.expert" />
 
 Aggregates events based upon given fields & timespan.
+
+![Aggregate illustration](../static/images/bots/aggregate.svg)
 
 Define specific fields to filter incoming events and aggregate them. Also set the timespan you want the events to get
 aggregated.
@@ -2640,7 +2613,7 @@ When using a whitelist field pattern and a small number of fields (keys), it bec
 exist in the events themselves. If a field does not exist, but is part of the hashing/deduplication, this field will be
 ignored. If such events should not get deduplicated, you need to filter them out before the deduplication process, e.g.
 using a sieve expert. See
-also [this discussion thread](https://lists.cert.at/pipermail/intelmq-users/2021-July/000370.html) on the mailing-list.
+also [this discussion thread](https://lists.cert.at/mailman3/hyperkitty/list/intelmq-users@lists.cert.at/thread/V6YTF4XGALC37C666LPWQ6KK6CLAR6T2/) on the mailing-list.
 
 **Configuration Example**
 
@@ -2708,6 +2681,39 @@ is `$portal_url + '/api/1.0/ripe/contact?cidr=%s'`.
 **`portal_api_key`**
 
 (required, string) The API key of the user to be used. Must have sufficient privileges.
+
+---
+
+### Fake <div id="intelmq.bots.experts.fake.expert" />
+
+Adds fake data to events. Currently supports setting the IP address and network.
+
+For each incoming event, the bots chooses one random IP network range from the configured data file.
+It set's the first IP address of the range as `source.ip` and the network itself as `source.network`.
+To adapt the `source.asn` field accordingly, use the [ASN Lookup Expert](#asn-lookup).
+
+**Module:** `intelmq.bots.experts.fake.expert`
+
+**Parameters:**
+
+**`database`**
+
+(required, string) Path to a JSON file in the following format:
+```
+{
+    "ip_network": [
+        "10.0.0.0/8",
+        ...
+    ]
+}
+```
+
+**`overwrite`**
+
+(optional, boolean) Whether to overwrite existing fields. Defaults to false.
+
+For data consistency `source.network` will only be set if `source.ip` was set or overridden.
+If overwrite is false, `source.ip` was did not exist before but `source.network` existed before, `source.network` will still be overridden.
 
 ---
 
@@ -3206,7 +3212,7 @@ This bots allows you to change arbitrary field values of events using a configur
 
 (optional, boolean) Overwrite any existing fields by matching rules. Defaults to false.
 
-**Configuration File**
+#### Configuration File Format
 
 The modify expert bot allows you to change arbitrary field values of events just using a configuration file. Thus it is
 possible to adapt certain values or adding new ones only by changing JSON-files without touching the code of many other
@@ -3217,17 +3223,66 @@ The configuration is called `modify.conf` and looks like this:
 ```json
 [
   {
-    "rulename": "Standard Protocols http",
+    "rulename": "Name of Rule 1",
     "if": {
-      "source.port": "^(80|443)$"
+      "fieldname": "comparison_value"
     },
     "then": {
-      "protocol.application": "http"
+      "fieldname": "newvalue"
     }
   },
+  [...]
+]
+```
+
+Each rule consists of a *rule name*, *conditions* and *actions*:
+The rule name is for your own documentation and only used in debugging output.
+Conditions and actions are dictionaries holding the field names of
+events and regular expressions to match values (selection) or set values (action). All matching rules will be applied in
+the given order. The actions of a rule are only performed if all conditions of the rule apply.
+
+One configuration file can contain an arbitrary number of rules.
+
+#### Condition
+
+* **Empty string**: If the value for a condition is an empty string, the bot checks if the field does not exist. This is useful to apply default values for empty fields.
+* A non-empty **string**: The matching uses [regular expressions](https://docs.python.org/3/library/re.html#re.search) to match the field. Use explicit beginning and end markers to match the full string instead of a substring: `^regex$`.
+  If the field is not a string, it will be converted to a string first. This allows for matching numeric values with regular expressions.
+  To escape a character in the regular expression, JSON requires you to double-escape, for example, in `"extra.version": "^10\\.0"` the `.` is matched as literal character.
+* All **other types**: boolean, integer, float, etc: Direct equality comparison
+
+To check for the existence of a field, you can therefore always use the condition `"."`.
+
+#### Action
+
+You can set the value of the field to a string literal or number.
+
+In addition you can use the [standard Python string format syntax](https://docs.python.org/3/library/string.html#format-string-syntax) to access the values from the processed event as `msg` and the match groups of the conditions as `matches`, see the bitdefender example above. Group 0 ([`0`]) contains the full matching string. See also the documentation on [re.Match.group](https://docs.python.org/3/library/re.html?highlight=re%20search#re.Match.group).
+
+Setting a field to an empty string deletes the field, for example:
+```json
+[
   {
+    "rulename": "Delete NAICS",
+    "if": {
+      "extra.naics": "."
+    },
+    "then": {
+      "extra.naics": ""
+    }
+  }
+]
+```
+The same effect can be achieved with the [Field Reducer Expert](#intelmq.bots.experts.field_reducer.expert).
+
+#### Examples
+
+```json
+[
+{
     "rulename": "Spamhaus Cert conficker",
     "if": {
+     "feed.name": "^Spamhaus Cert$",
       "malware.name": "^conficker(ab)?$"
     },
     "then": {
@@ -3235,8 +3290,9 @@ The configuration is called `modify.conf` and looks like this:
     }
   },
   {
-    "rulename": "bitdefender",
+    "rulename": "Spamhaus Cert bitdefender",
     "if": {
+     "feed.name": "^Spamhaus Cert$",
       "malware.name": "bitdefender-(.*)$"
     },
     "then": {
@@ -3244,16 +3300,7 @@ The configuration is called `modify.conf` and looks like this:
     }
   },
   {
-    "rulename": "urlzone",
-    "if": {
-      "malware.name": "^urlzone2?$"
-    },
-    "then": {
-      "classification.identifier": "urlzone"
-    }
-  },
-  {
-    "rulename": "default",
+    "rulename": "Spamhaus Cert default",
     "if": {
       "feed.name": "^Spamhaus Cert$"
     },
@@ -3264,44 +3311,14 @@ The configuration is called `modify.conf` and looks like this:
 ]
 ```
 
-In our example above we have five groups labeled `Standard Protocols http`, `Spamhaus Cert conficker`,
-`bitdefender`, `urlzone` and `default`. All sections will be considered, in the given order (from top to bottom).
+In our example above we have three rules named `Spamhaus Cert conficker`,
+`Spamhaus Cert bitdefender` and `Spamhaus Cert default`.
 
-Each rule consists of *conditions* and *actions*. Conditions and actions are dictionaries holding the field names of
-events and regular expressions to match values (selection) or set values (action). All matching rules will be applied in
-the given order. The actions are only performed if all selections apply.
+Assume we have an event with `feed.name = Spamhaus Cert` and `malware.name = confickerab`, and `maximum_matches` is set to 1.
 
-If the value for a condition is an empty string, the bot checks if the field does not exist. This is useful to apply
-default values for empty fields.
+The expert loops over all sections in the file, and the first matching one is `Spamhaus Cert conficker`. It applies the action, setting the new `classification.identifier` and then stops, as the maximum matches has been reached.
 
-**Actions**
-
-You can set the value of the field to a string literal or number.
-
-In addition you can use the [standard Python string format syntax](https://docs.python.org/3/library/string.html#format-string-syntax) to access the values from the processed event as `msg` and the match groups of the conditions as `matches`, see the bitdefender example above. Group 0 ([`0`]) contains the full matching string. See also the documentation on [re.Match.group](https://docs.python.org/3/library/re.html?highlight=re%20search#re.Match.group).
-
-Note that `matches` will also contain the match groups from the default conditions if there were any.
-
-**Examples**
-
-We have an event with `feed.name = Spamhaus Cert` and `malware.name = confickerab`. The expert loops over all sections
-in the file and eventually enters section `Spamhaus Cert`. First, the default condition is checked, it matches!
-OK, going on. Otherwise the expert would have selected a different section that has not yet been considered. Now, go
-through the rules, until we hit the rule `conficker`. We combine the conditions of this rule with the default
-conditions, and both rules match! So we can apply the action: `classification.identifier` is set to `conficker`, the
-trivial name.
-
-Assume we have an event with `feed.name = Spamhaus Cert` and `malware.name = feodo`. The default condition matches, but
-no others. So the default action is applied. The value for `classification.identifier` will be set to `feodo`
-by `{msg[malware.name]}`.
-
-**Types**
-
-If the rule is a string, a regular expression search is performed, also for numeric values (`str()` is called on them).
-If the rule is numeric for numeric values, a simple comparison is done. If other types are mixed, a warning will be
-thrown.
-
-For boolean values, the comparison value needs to be `true` or `false` as in JSON they are written all-lowercase.
+Assume we have an event with `feed.name = Spamhaus Cert` and `malware.name = feodo`. The first and only matching rule is the `default`. So the default action is applied. The value for `classification.identifier` will be set to `feodo` by `{msg[malware.name]}`.
 
 ---
 
@@ -3500,6 +3517,56 @@ to true.
 
 (optional, boolean) Query for IPs at `https://stat.ripe.net/data/maxmind-geo-lite/data.json?resource=%s`. Defaults to
 true.
+
+---
+
+### SecurityTXT <div id="intelmq.bots.experts.securitytxt.expert" />
+
+SecurityTXT is an initiative to standardize how websites publish their abuse contact information.
+It is standardized in [RFC 9116 "A File Format to Aid in Security Vulnerability Disclosure"](https://datatracker.ietf.org/doc/rfc9116/).
+Refer to the linked document RFC for more information on `security.txt`.
+This bot looks for `security.txt` files on a URL or IP, retrieves the primary contact information out of it and adds this to the event.
+
+**Requirements**
+
+To use this bot, you need to install the required dependencies:
+
+```bash
+pip3 install -r intelmq/bots/experts/securitytxt/REQUIREMENTS.txt
+```
+
+**Module:** `intelmq.bots.experts.securitytxt.expert`
+
+**Parameters**
+
+**`url_field`**
+
+The field in the event that contains the URL/IP on which to look for the the security.txt file. Default: `source.reverse_dns`
+
+**`contact_field`**
+
+The field in the event in which to put the found contact details. Default: `source.abuse_contact`
+
+**`only_email_address`** (bool)
+
+Contact details can be web URLs or email addresses. When this value is set to True, it only selects email addresses as contact information.
+Default: `true`
+
+**`overwrite`** (bool)
+
+Boolean indicating whether to override existing data in contact_field.
+Default: `true`
+
+**`check_expired`** (bool)
+
+Boolean indicating whether to check if the security.txt has expired according to its own expiry date.
+Default: `false`
+
+**`check_canonical`** (bool)
+
+Boolean indicating whether to check if the url is contained in the list of canonical urls.
+Default: `false`
+
 
 ---
 

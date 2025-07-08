@@ -56,7 +56,7 @@ class Bot:
     __stats_cache: cache.Cache = None
     __source_pipeline = None
     __destination_pipeline = None
-    __log_buffer: List[tuple] = []
+    __log_buffer: list[tuple] = []
     # runtime_file
     __runtime_settings: Optional[dict] = None
     # settings provided via parameter
@@ -612,7 +612,7 @@ class Bot:
                 print(level.upper(), '-', message)
         self.__log_buffer = []
 
-    def __check_bot_id(self, name: str) -> Tuple[str, str, str]:
+    def __check_bot_id(self, name: str) -> tuple[str, str, str]:
         res = re.fullmatch(r'([0-9a-zA-Z\-]+)(\.[0-9]+)?', name)
         if res:
             if not (res.group(2) and threading.current_thread() == threading.main_thread()):
@@ -975,7 +975,7 @@ class Bot:
         self.http_header['User-agent'] = self.http_user_agent
 
     @staticmethod
-    def check(parameters: dict) -> Optional[List[List[str]]]:
+    def check(parameters: dict) -> Optional[list[list[str]]]:
         """
         The bot's own check function can perform individual checks on it's
         parameters.
@@ -1082,6 +1082,7 @@ class ParserBot(Bot):
     _default_message_type = 'Report'
 
     default_fields: Optional[dict] = {}
+    copy_collector_provided_fields: Optional[list] = []
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -1126,6 +1127,11 @@ class ParserBot(Bot):
         if not self._line_ending or isinstance(self._line_ending, tuple):
             self._line_ending = '\r\n'
         return data_io
+
+    def new_event(self, *args, **kwargs):
+        if self.copy_collector_provided_fields:
+            kwargs['copy_collector_provided_fields'] = self.copy_collector_provided_fields
+        return super().new_event(*args, **kwargs)
 
     def parse_csv(self, report: libmessage.Report):
         """

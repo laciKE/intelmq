@@ -20,6 +20,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Callable, Dict, Optional, Union
 from enum import Enum, auto
 
+from intelmq import VAR_STATE_PATH
 import intelmq.lib.exceptions as exceptions
 from intelmq import HARMONIZATION_CONF_FILE
 from intelmq.lib import utils
@@ -55,7 +56,7 @@ class SieveExpertBot(ExpertBot):
 
     _harmonization = None
     file: str = (
-        "/opt/intelmq/var/lib/bots/sieve/filter.sieve"  # TODO: should be pathlib.Path
+        f"{VAR_STATE_PATH}sieve/filter.sieve"  # TODO: should be pathlib.Path
     )
 
     def init(self) -> None:
@@ -172,7 +173,7 @@ class SieveExpertBot(ExpertBot):
 
     _date_op_map = {":before": operator.lt, ":after": operator.gt}
 
-    _cond_map: Dict[
+    _cond_map: dict[
         str,
         Callable[
             [
