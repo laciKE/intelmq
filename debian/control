@@ -49,6 +49,7 @@ Depends: bash-completion,
          ${misc:Depends},
          ${sphinxdoc:Depends},
          ${python3:Depends}
+Recommends: intelmq-contrib
 Suggests: python3-geoip2 (>= 2.2.0),
           python3-imbox (>= 0.8),
           python3-psycopg2 (>= 2.5.5),
@@ -65,6 +66,23 @@ Description: Solution for IT security teams for collecting and processing securi
  designed by European CERTs/CSIRTs during several InfoSec events. Its main goal
  is to give to incident responders an easy way to collect & process threat
  intelligence thus improving the incident handling processes of CERTs.
+ .
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
+Package: intelmq-contrib
+Architecture: all
+Depends: intelmq,
+         ${misc:Depends},
+         ${python3:Depends}
+Suggests:
+Description: Contributed scripts for IntelMQ
+ Extensions, scripts, additional programs and examples
  .
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
