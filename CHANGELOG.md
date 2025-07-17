@@ -33,7 +33,9 @@ Please refer to the [NEWS](NEWS.md) for a list of changes which have an affect o
   - Print URLs to stdout only in verbose mode (PR#2591 by Sebastian Wagner).
   - Check for database file existence and writability (fixes #2566).
   - Use database path matching to installation type (PR#2606 by Sebastian Wagner).
-- `intelmq.bots.experts.fake.expert`: Use database path matching to installation type (PR#2606 by Sebastian Wagner).
+- `intelmq.bots.experts.fake.expert`:
+  - Use database path matching to installation type (PR#2606 by Sebastian Wagner).
+  - Add new mode `random_single_value` (PR#2601 by Sebastian Wagner).
 
 #### Outputs
 
