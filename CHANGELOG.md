@@ -44,6 +44,7 @@ Please refer to the [NEWS](NEWS.md) for a list of changes which have an affect o
 - `intelmq.tests.lib.test_pipeline.TestAmqp.test_acknowledge`: Skip on all Python versions when running on CI (PR#2602 by Sebastian Wagner).
 - `.github/workflows/codespell.yml`, `debian-package.yml`, `regexploit.yml`: Upgrade to `ubuntu-latest` runners (PR#2602 by Sebastian Wagner).
 - `intelmq.test.test_conf`: With changed behaviour in ruamel.yaml on line wrapping since version 0.18.13, only test the parsabilty of `runtime.yaml` (PR#2619 by Sebastian Wagner).
+- `intelmq.test.BotTestCase.test_static_bot_check_method`: Remove debugging stub raising for all non-empty checks (PR#2622 by Sebastian Wagner).
 
 ### Tools
 - `intelmq.bin.intelmq_psql_initdb`: Use `JSONB` type by default, Postgres supports it since version 9 (PR#2597 by Sebastian Wagner).

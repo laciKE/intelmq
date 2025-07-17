@@ -304,7 +304,6 @@ class BotTestCase:
             self.assertNotEqual(check[0].upper(), 'ERROR',
                                 '%s.check returned the error %r.'
                                 '' % (self.bot_name, check[1]))
-        raise ValueError(f'checks is {checks!r}')
 
     def run_bot(self, iterations: int = 1, error_on_pipeline: bool = False,
                 prepare=True, parameters={},
