@@ -7,13 +7,14 @@ from random import choice
 from json import load as json_load
 
 from intelmq.lib.bot import ExpertBot
+from intelmq import VAR_STATE_PATH
 
 
 class FakeExpertBot(ExpertBot):
     """Add fake data"""
 
     overwrite: bool = False
-    database: str = None  # TODO: should be pathlib.Path
+    database: str = f'{VAR_STATE_PATH}fake/data.json'  # TODO: should be pathlib.Path
 
     def init(self):
         with open(self.database) as database:
