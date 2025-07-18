@@ -40,6 +40,11 @@ Please refer to the [NEWS](NEWS.md) for a list of changes which have an affect o
 - `intelmq.bots.experts.sieve.expert`: Test for textX dependency in self-check (PR#2605 by Sebastian Wagner).
 
 #### Outputs
+- `intelmq.bots.outputs.smtp_batch.output`:
+  - Add new parameter `additional_grouping_keys` for an enhanced email batching feature.
+  - Add new parameter `templating` for additional template variables.
+  - Add new parameter `allowed_fieldnames` for csv field specification.
+  - Add new parameter `fieldnames_translation` for naming csv headers (PR#2610 by Lukas Heindl, fixes #2586).
 
 ### Documentation
 - Fix and refresh links to mailing lists (PR#2609 by Kamil Mańkowski)
