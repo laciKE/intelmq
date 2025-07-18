@@ -125,6 +125,7 @@ Please refer to the [NEWS](NEWS.md) for a list of changes which have an affect o
 - `intelmq.tests.lib.test_pipeline.TestAmqp.test_acknowledge`: Also skip on Python 3.11 and 3.12 besides on 3.8 when running on CI (PR#2542 by Sebastian Wagner).
 - Full pytest workflow: Version-independent install of postgres client, for Ubuntu 24.04 (default on GitHub now) test environment compatibility (PR#2557 by Sebastian Wagner).
 - Debian package build workflow: Use artifact upload v4 instead of v3 (PR#2565 by Sebastian Wagner).
+- `intelmq.lib.test.BotTestCase`: Show the warnings and errors of a bot if the amount does not match the expected number (PR#2578 by Kamil Mankowski/Sebastian Wagner, related to #2571).
 
 ### Known issues
 This is short list of the most important known issues. The full list can be retrieved from [GitHub](https://github.com/certtools/intelmq/labels/bug?page=2&q=is%3Aopen+label%3Abug).
