@@ -17,6 +17,7 @@ Please refer to the [NEWS](NEWS.md) for a list of changes which have an affect o
 
 ### Core
 - Drop support for Python 3.8 (fixes #2616, PR#2617 by Sebastian Wagner).
+- `intelmq.lib.splitreports`: Handle bot parameter `chunk_size` values empty string, due to missing parameter typing checks (PR#2604 by Sebastian Wagner).
 
 ### Development
 
@@ -24,13 +25,29 @@ Please refer to the [NEWS](NEWS.md) for a list of changes which have an affect o
 
 ### Bots
 #### Collectors
+- `intelmq.bots.collectors.taxii.collector`: Added new bot to collect data from TAXII servers (PR#2611 by Ladislav Baco).
 
 #### Parsers
+- `intelmq.bots.parsers.cymru.parser_cap_program`: Add mapping for TOR and ipv6-icmp protocol (PR#2621 by Mikk Margus Möll).
+- `intelmq.bots.parsers.stix.parser`: Added new bot to parse STIX data (PR#2611 by Ladislav Baco).
+- `intelmq.bots.parsers.stix.parser_eset`: Added new bot to parse STIX data from ESET (PR#2611 by Ladislav Baco).
 
 #### Experts
-- `intelmq.bots.experts.asn_lookup.expert`: Print URLs to stdout only in verbose mode (PR#2591 by Sebastian Wagner).
+- `intelmq.bots.experts.asn_lookup.expert`:
+  - Print URLs to stdout only in verbose mode (PR#2591 by Sebastian Wagner).
+  - Check for database file existence and writability (fixes #2566).
+  - Use database path matching to installation type (PR#2606 by Sebastian Wagner).
+- `intelmq.bots.experts.fake.expert`:
+  - Use database path matching to installation type (PR#2606 by Sebastian Wagner).
+  - Add new mode `random_single_value` (PR#2601 by Sebastian Wagner).
+- `intelmq.bots.experts.sieve.expert`: Test for textX dependency in self-check (PR#2605 by Sebastian Wagner).
 
 #### Outputs
+- `intelmq.bots.outputs.smtp_batch.output`:
+  - Add new parameter `additional_grouping_keys` for an enhanced email batching feature.
+  - Add new parameter `templating` for additional template variables.
+  - Add new parameter `allowed_fieldnames` for csv field specification.
+  - Add new parameter `fieldnames_translation` for naming csv headers (PR#2610 by Lukas Heindl, fixes #2586).
 
 ### Documentation
 - Fix and refresh links to mailing lists (PR#2609 by Kamil Mańkowski)
@@ -38,14 +55,18 @@ Please refer to the [NEWS](NEWS.md) for a list of changes which have an affect o
 
 ### Packaging
 - Replace `/opt/intelmq` example paths in bots with variable `VAR_STATE_PATH` for correct paths in LSB-path setups like with packages (PR#2587 by Sebastian Wagner).
+- New deb-package `intelmq-contrib` with all `contrib/` scripts and documentation (PR#2614 by Sebastian Wagner).
 
 ### Tests
 - `intelmq.tests.lib.test_pipeline.TestAmqp.test_acknowledge`: Skip on all Python versions when running on CI (PR#2602 by Sebastian Wagner).
 - `.github/workflows/codespell.yml`, `debian-package.yml`, `regexploit.yml`: Upgrade to `ubuntu-latest` runners (PR#2602 by Sebastian Wagner).
+- `intelmq.test.test_conf`: With changed behaviour in ruamel.yaml on line wrapping since version 0.18.13, only test the parsabilty of `runtime.yaml` (PR#2619 by Sebastian Wagner).
+- `intelmq.test.BotTestCase.test_static_bot_check_method`: Remove debugging stub raising for all non-empty checks (PR#2622 by Sebastian Wagner).
 
 ### Tools
 - `intelmq.bin.intelmq_psql_initdb`: Use `JSONB` type by default, Postgres supports it since version 9 (PR#2597 by Sebastian Wagner).
 - `intelmq.bin.rewrite_config_files`: Removed obsolete JSON configuration file rewriter (PR#2613 by Sebastian Wagner).
+- `intelmq/lib/bot_debugger.py`: Fix overwriting the runtime logging level by command line parameter (PR#2603 by Sebastian Wagner, fixes #2563).
 
 ### Contrib
 
@@ -112,6 +133,7 @@ Please refer to the [NEWS](NEWS.md) for a list of changes which have an affect o
 - `intelmq.tests.lib.test_pipeline.TestAmqp.test_acknowledge`: Also skip on Python 3.11 and 3.12 besides on 3.8 when running on CI (PR#2542 by Sebastian Wagner).
 - Full pytest workflow: Version-independent install of postgres client, for Ubuntu 24.04 (default on GitHub now) test environment compatibility (PR#2557 by Sebastian Wagner).
 - Debian package build workflow: Use artifact upload v4 instead of v3 (PR#2565 by Sebastian Wagner).
+- `intelmq.lib.test.BotTestCase`: Show the warnings and errors of a bot if the amount does not match the expected number (PR#2578 by Kamil Mankowski/Sebastian Wagner, related to #2571).
 
 ### Known issues
 This is short list of the most important known issues. The full list can be retrieved from [GitHub](https://github.com/certtools/intelmq/labels/bug?page=2&q=is%3Aopen+label%3Abug).

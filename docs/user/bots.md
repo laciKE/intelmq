@@ -1276,6 +1276,40 @@ Also, you will need to know an appropriate STOMP *destination* (aka
 
 (optional, string) Password to use.
 
+---
+
+### TAXII <div id="intelmq.bots.collectors.taxii.collector" />
+
+Collects indicator objects from TAXII server.
+
+**Module:** `intelmq.bots.collectors.taxii.collector`
+
+**Requirements**
+
+Install `taxii2-client` module:
+
+```bash
+pip3 install -r intelmq/bots/collectors/taxii/REQUIREMENTS.txt
+```
+
+**Parameters (also expects [feed parameters](#feed-parameters)):**
+
+**`username`**
+
+(required, string) TAXII username.
+
+**`password`**
+
+(required, string) TAXII password.
+
+**`collection`**
+
+(required, string) The URL of collection to fetch.
+
+**`time_delta`**
+
+(optional, integer) The time (in seconds) span to look back. Default to 3600.
+
 ## Parser Bots
 
 If not set differently during parsing, all parser bots copy the following fields from the report to an event:
@@ -2238,6 +2272,48 @@ No additional parameters.
 
 ---
 
+### STIX <div id="intelmq.bots.parsers.stix.parser" />
+
+Parses indicators objects in STIX format received by TAXII collector.
+
+**Module:** `intelmq.bots.parsers.stix.parser`
+
+**Requirements**
+
+Install `stix2-patterns` module:
+
+```bash
+pip3 install -r intelmq/bots/parsers/stix/REQUIREMENTS.txt
+```
+
+No additional parameters.
+
+---
+
+### STIX <div id="intelmq.bots.parsers.stix.parser_eset" />
+
+Parses ESET Threat Intelligence feeds.
+
+This bot Parses indicators objects in STIX format received by TAXII collector
+from ESET Threat Intelligence TAXII server.
+Then it analyzes event's comments based on STIX indicator's description
+and it adds classification.type and malware family info.
+It is recommended to apply TaxonomyExpertBot then to map the taxonomy.
+
+**Module:** `intelmq.bots.parsers.stix.parser_eset`
+
+**Requirements**
+
+Install `stix2-patterns` module:
+
+```bash
+pip3 install -r intelmq/bots/parsers/stix/REQUIREMENTS.txt
+```
+
+No additional parameters.
+
+---
+
 ### Surbl <div id="intelmq.bots.parsers.surbl.parser" />
 
 Parses data from surbl feed.
@@ -2686,11 +2762,12 @@ is `$portal_url + '/api/1.0/ripe/contact?cidr=%s'`.
 
 ### Fake <div id="intelmq.bots.experts.fake.expert" />
 
-Adds fake data to events. Currently supports setting the IP address and network.
+Adds fake data to events. It currently supports two operation methods:
 
-For each incoming event, the bots chooses one random IP network range from the configured data file.
-It set's the first IP address of the range as `source.ip` and the network itself as `source.network`.
-To adapt the `source.asn` field accordingly, use the [ASN Lookup Expert](#asn-lookup).
+* Setting the IP address and network
+* For any Event field, set the value to a random item of a user-defined list (mode `random_single_value`)
+
+For a detailed description of the modes, see below.
 
 **Module:** `intelmq.bots.experts.fake.expert`
 
@@ -2698,13 +2775,21 @@ To adapt the `source.asn` field accordingly, use the [ASN Lookup Expert](#asn-lo
 
 **`database`**
 
-(required, string) Path to a JSON file in the following format:
+(required, string) Path to a JSON file in the following format (example):
 ```
 {
     "ip_network": [
         "10.0.0.0/8",
+        "192.168.0.0/16",
         ...
-    ]
+    ],
+    "event_fields": {
+      "extra.severity": {
+        "mode": "random_single_value",
+        "values": ["critical", "high", "medium", "low", "info", "undefined"]
+      },
+      ...
+    }
 }
 ```
 
@@ -2712,8 +2797,19 @@ To adapt the `source.asn` field accordingly, use the [ASN Lookup Expert](#asn-lo
 
 (optional, boolean) Whether to overwrite existing fields. Defaults to false.
 
+### Modes
+
+#### IP Network
+For each incoming event, the bots chooses one random IP network range (IPv4 or IPv6) from the configured data file.
+It set's the first IP address of the range as `source.ip` and the network itself as `source.network`.
+To adapt the `source.asn` field accordingly, use the [ASN Lookup Expert](#asn-lookup).
+
 For data consistency `source.network` will only be set if `source.ip` was set or overridden.
 If overwrite is false, `source.ip` was did not exist before but `source.network` existed before, `source.network` will still be overridden.
+
+#### Event fields
+##### Mode `random_single_value`
+For any possible event field, the bot chooses a random value of the values in the `values` property.
 
 ---
 
@@ -5098,6 +5194,28 @@ original@email.com,alternative@email.com
 original2@email.com,person1@email.com;person2@email.com
 original3@email.com, Mary <person1@example.com>; John <person2@example.com>
 ```
+
+**`additional_grouping_keys`**
+
+(optional, list) By-default events are grouped by the E-Mail-Address into buckets. For each bucket one E-Mail is sent. You may add more fields to group-by here to make potentially more buckets.
+Side-effect: Every field that is included in the group-by is ensured to be unique for all events in the bucket and may thus be used for templating.
+Note: The keys listed here refer to the keys in the events (in contrast to the CSV column names).
+Default: `[]`
+
+**`templating`**
+
+(optional, dict) Defines which strings should be processed by jinja2 templating. For templating only keys which are unique for the complete bucket are available. This always includes the destination address (`source.abuse_contact`) and all keys of `additional_grouping_keys` which are present in the bucket. There is one additional key `current_time` available which holds a `datetime.datetime` object of the current (local) time.
+Note: The keys available for templating refer to the keys defined for the events (in contrast to the CSV column names). Still the keys get transformed: each `'.'` gets replaced to `_` in order to make referencing the key in jinja2 easier.
+Default: `{subject: False, body: False, attachment: False}`
+
+**`allowed_fieldnames`**
+
+(optional, list) Lists the fields which are included in the csv file. Every element should be also included in `fieldnames_translation` to avoid crashes.
+
+**`fieldnames_translation`**
+
+(optional, dict) Maps each the name of each field listed in `allowed_fieldnames` to a different name to be used in the csv header.
+**Warning:** The Bot will crash on sending in case a fieldname is present in an event and in `allowed_fieldnames` but not in `fieldnames_translation`.
 
 **`attachment_name`**
 
